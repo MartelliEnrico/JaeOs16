@@ -1,3 +1,5 @@
+.phony: all clean
+
 all: p0test
 
 p0test:
