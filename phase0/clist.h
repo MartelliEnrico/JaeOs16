@@ -39,7 +39,7 @@ struct clist {
 /* clistp is the address of the tail pointer (struct clist *) */
 /* member is the field of *elem used to link this list */
 #define clist_push(elem, clistp, member) do { \
-    if((clistp)->next == NULL) { \
+    if(clist_empty(*(clistp))) { \
         (elem)->member.next = &((elem)->member); \
     } else { \
         (elem)->member.next = (clistp)->next; \
