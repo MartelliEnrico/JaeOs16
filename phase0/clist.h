@@ -49,12 +49,12 @@ struct clist {
 /* return the pointer of the first element of the circular queue.
      elem is also an argument to retrieve the type of the element */
 /* member is the field of *elem used to link this list */
-#define clist_head(elem, clistx, member)
+#define clist_head(elem, clistx, member) container_of((clistx).next.next, typeof(&(elem)), member)
 
 /* return the pointer of the last element of the circular queue.
      elem is also an argument to retrieve the type of the element */
 /* member is the field of *elem used to link this list */
-#define clist_tail(elem, clistx, member)
+#define clist_tail(elem, clistx, member) container_of((clistx).next, typeof(&(elem)), member)
 
 /* clist_pop and clist__dequeue are synonyms */
 /* delete the first element of the list (this macro does not return any value) */
