@@ -50,7 +50,7 @@ int main()
 				free(elem);
 			}
 			break;
-		case 'x':
+		/*case 'x':
 			elem = (struct clistofint *)strtol(buf + 1, NULL, 0);
 			if (clist_delete(elem, &myclist, list) == 0) {
 				printf("delete %p->done\n", elem);
@@ -83,7 +83,7 @@ int main()
 			if (clist_foreach_all(scan, &myclist, list, tmp)) {
 				clist_enqueue(elem, &myclist, list);
 			}
-			break;
+			break;*/
 		case 'e':
 			printf("empty? -> %s\n", clist_empty(myclist) ? "true" : "false");
 			break;

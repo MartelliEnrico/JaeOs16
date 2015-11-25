@@ -18,15 +18,6 @@ struct clist {
 /* constant used to initialize an empty list */
 #define CLIST_INIT {NULL}
 
-#define __clist_append(elem, clistp, member) do { \
-    if((clistp)->next == NULL) { \
-        (elem)->member.next = &((elem)->member); \
-    } else { \
-        (elem)->member.next = (clistp)->next; \
-        (clistp)->next->next = &((elem)->member); \
-    } \
-} while(0)
-
 /* add the structure pointed to by elem as the last element of a circular list */
 /* clistp is the address of the tail pointer (struct clist *) */
 /* member is the field of *elem used to link this list */
