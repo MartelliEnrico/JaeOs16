@@ -50,7 +50,7 @@ int main()
 				free(elem);
 			}
 			break;
-		/*case 'x':
+		case 'x':
 			elem = (struct clistofint *)strtol(buf + 1, NULL, 0);
 			if (clist_delete(elem, &myclist, list) == 0) {
 				printf("delete %p->done\n", elem);
@@ -59,7 +59,7 @@ int main()
 				printf("delete %p->err\n", elem);
 			}
 			break;
-		case '-':
+		/*case '-':
 			value = strtol(buf + 1, NULL, 0);
 			clist_foreach(scan, &myclist, list, tmp) {
 				if (value == scan->value)

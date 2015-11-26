@@ -64,10 +64,7 @@ struct clist {
 /* delete the first element of the list (this macro does not return any value) */
 /* clistp is the address of the tail pointer (struct clist *) */
 #define clist_pop(clistp) clist_dequeue(clistp)
-#define clist_dequeue(clistp) do { \
-    struct clist *tmp = (clistp)->next->next->next; \
-    (clistp)->next->next = tmp; \
-} while(0)
+#define clist_dequeue(clistp) (clistp)->next->next = (clistp)->next->next->next
 
 /* delete from a circular list the element whose pointer is elem */
 /* clistp is the address of the tail pointer (struct clist *) */
@@ -88,7 +85,7 @@ struct clist {
 /* this macro should be used after the end of a clist_foreach cycle
      using the same args. it returns false if the cycle terminated by a break,
      true if it scanned all the elements */
-#define clist_foreach_all(scan, clistp, member, tmp)
+#define clist_foreach_all(scan, clistp, member, tmp) if((scan)->member.next != (clistp)->next->next)
 
 /* this macro should be used *inside* a clist_foreach loop to delete the
      current element */
