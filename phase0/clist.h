@@ -15,6 +15,8 @@ struct clist {
     struct clist *next;
 };
 
+#define in(name) struct clist name
+
 /* constant used to initialize an empty list */
 #define CLIST_INIT {NULL}
 
