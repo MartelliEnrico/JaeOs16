@@ -66,7 +66,6 @@ struct clist {
 #define clist_pop(clistp) clist_dequeue(clistp)
 #define clist_dequeue(clistp) do { \
     struct clist *tmp = (clistp)->next->next->next; \
-    free((clistp)->next->next); \
     (clistp)->next->next = tmp; \
 } while(0)
 
