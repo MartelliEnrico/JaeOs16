@@ -24,7 +24,12 @@ struct clist {
 /* clistp is the address of the tail pointer (struct clist *) */
 /* member is the field of *elem used to link this list */
 #define clist_enqueue(elem, clistp, member) do { \
-    clist_push(elem, clistp, member); \
+    if(clist_empty(*(clistp))) { \
+        (elem)->member.next = &((elem)->member); \
+    } else { \
+        (elem)->member.next = (clistp)->next->next; \
+        (clistp)->next->next = &((elem)->member); \
+    } \
     (clistp)->next = &((elem)->member); \
 } while (0)
 
@@ -34,8 +39,9 @@ struct clist {
 #define clist_push(elem, clistp, member) do { \
     if(clist_empty(*(clistp))) { \
         (elem)->member.next = &((elem)->member); \
+        (clistp)->next = &((elem)->member); \
     } else { \
-        (elem)->member.next = (clistp)->next; \
+        (elem)->member.next = (clistp)->next->next; \
         (clistp)->next->next = &((elem)->member); \
     } \
 } while(0)
@@ -75,7 +81,10 @@ struct clist {
 /* clistp is the address of the tail pointer (struct clist *) */
 /* member is the field of *elem used to link this list */
 /* tmp is a void * temporary variable */
-#define clist_foreach(scan, clistp, member, tmp)
+#define clist_foreach(scan, clistp, member, tmp) if(!clist_empty(*(clistp))) \
+    for((scan) = container_of((clistp)->next->next, typeof(*(scan)), member); ; \
+        ({if((scan)->member.next == (clistp)->next->next) break; \
+            else (scan) = container_of((scan)->member.next, typeof(*(scan)), member);}))
 
 /* this macro should be used after the end of a clist_foreach cycle
      using the same args. it returns false if the cycle terminated by a break,
