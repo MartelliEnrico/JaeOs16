@@ -15,7 +15,7 @@ struct clist {
     struct clist *next;
 };
 
-#define in(name) struct clist name
+#define in(...) struct clist __VA_ARGS__
 
 /* constant used to initialize an empty list */
 #define CLIST_INIT {NULL}
@@ -66,15 +66,15 @@ struct clist {
 /* delete the first element of the list (this macro does not return any value) */
 /* clistp is the address of the tail pointer (struct clist *) */
 #define clist_pop(clistp) clist_dequeue(clistp)
-#define clist_dequeue(clistp) ({int ret = 0; \
-    if(clist_empty(*(clistp))) { \
-        ret = 1; \
-    } else if((clistp)->next == (clistp)->next->next) { \
-        (clistp)->next = NULL; \
-    } else { \
-        (clistp)->next->next = (clistp)->next->next->next; \
+#define clist_dequeue(clistp) do { \
+    if(!clist_empty(*(clistp))) { \
+        if((clistp)->next == (clistp)->next->next) { \
+            (clistp)->next = NULL; \
+        } else { \
+            (clistp)->next->next = (clistp)->next->next->next; \
+        } \
     } \
-    ret;})
+} while (0)
 
 /* delete from a circular list the element whose pointer is elem */
 /* clistp is the address of the tail pointer (struct clist *) */
@@ -95,11 +95,17 @@ struct clist {
 /* this macro should be used after the end of a clist_foreach cycle
      using the same args. it returns false if the cycle terminated by a break,
      true if it scanned all the elements */
-#define clist_foreach_all(scan, clistp, member, tmp) &(scan)->member != (clistp)->next
+#define clist_foreach_all(scan, clistp, member, tmp) clist_empty(*(clistp)) || &(scan)->member == (clistp)->next
 
 /* this macro should be used *inside* a clist_foreach loop to delete the
      current element */
-#define clist_foreach_delete(scan, clistp, member, tmp) ((typeof(scan))(tmp))->member.next = (scan)->member.next
+#define clist_foreach_delete(scan, clistp, member, tmp) do { \
+    if((clistp)->next == (clistp)->next->next) { \
+        (clistp)->next = NULL; \
+    } else { \
+        ((typeof(scan))(tmp))->member.next = (scan)->member.next; \
+    } \
+} while (0)
 
 /* this macro should be used *inside* a clist_foreach loop to add an element
     before the current one */
