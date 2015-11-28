@@ -21,7 +21,7 @@ int main()
 		switch (*buf) {
 		case 'l':
 			clist_foreach(scan, &myclist, list, tmp) {
-				printf("== %p %d\n", scan, scan->value);
+				printf("== %p (%p) %d\n", scan, &scan->list, scan->value);
 			}
 			break;
 		case 'a':
@@ -50,7 +50,7 @@ int main()
 				free(elem);
 			}
 			break;
-		/*case 'x':
+		case 'x':
 			elem = (struct clistofint *)strtol(buf + 1, NULL, 0);
 			if (clist_delete(elem, &myclist, list) == 0) {
 				printf("delete %p->done\n", elem);
@@ -58,12 +58,11 @@ int main()
 			} else {
 				printf("delete %p->err\n", elem);
 			}
-			break;*/
+			break;
 		case '-':
 			value = strtol(buf + 1, NULL, 0);
 			clist_foreach(scan, &myclist, list, tmp) {
-				if (value == scan->value)
-				{
+				if (value == scan->value) {
 					clist_foreach_delete(scan, &myclist, list, tmp);
 					printf("delete %p->done\n", scan);
 					free(scan);
