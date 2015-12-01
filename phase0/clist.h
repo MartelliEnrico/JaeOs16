@@ -20,45 +20,56 @@ struct clist {
 /* constant used to initialize an empty list */
 #define CLIST_INIT {NULL}
 
+/* clist_empty returns true in the circular list is empty, false otherwise */
+/* clistx is a struct clist */
+#define clist_empty(clistx) ((clistx).next == NULL)
+
+static inline void __clist_add(struct clist *elem, struct clist* list) {
+    if (clist_empty(*list)) {
+        elem->next = elem;
+    } else {
+        elem->next = list->next->next;
+        list->next->next = elem;
+    }
+}
+
 /* add the structure pointed to by elem as the last element of a circular list */
 /* clistp is the address of the tail pointer (struct clist *) */
 /* member is the field of *elem used to link this list */
-#define clist_enqueue(elem, clistp, member) do { \
-    if(clist_empty(*(clistp))) { \
-        (elem)->member.next = &((elem)->member); \
-    } else { \
-        (elem)->member.next = (clistp)->next->next; \
-        (clistp)->next->next = &((elem)->member); \
-    } \
-    (clistp)->next = &((elem)->member); \
-} while (0)
+#define clist_enqueue(elem, clistp, member) __clist_enqueue(&((elem)->member), clistp)
+
+static inline void __clist_enqueue(struct clist *elem, struct clist* list) {
+    __clist_add(elem, list);
+    list->next = elem;
+}
 
 /* add the structure pointed to by elem as the first element of a circular list */
 /* clistp is the address of the tail pointer (struct clist *) */
 /* member is the field of *elem used to link this list */
-#define clist_push(elem, clistp, member) do { \
-    if(clist_empty(*(clistp))) { \
-        (elem)->member.next = &((elem)->member); \
-        (clistp)->next = &((elem)->member); \
-    } else { \
-        (elem)->member.next = (clistp)->next->next; \
-        (clistp)->next->next = &((elem)->member); \
-    } \
-} while (0)
+#define clist_push(elem, clistp, member) __clist_push(&((elem)->member), clistp)
 
-/* clist_empty returns true in the circular list is empty, false otherwise */
-/* clistx is a struct clist */
-#define clist_empty(clistx) ((clistx).next == NULL)
+static inline void __clist_push(struct clist *elem, struct clist *list) {
+    __clist_add(elem, list);
+    if (clist_empty(*list)) {
+        list->next = elem;
+    }
+}
 
 /* return the pointer of the first element of the circular queue.
      elem is also an argument to retrieve the type of the element */
 /* member is the field of *elem used to link this list */
 #define clist_head(elem, clistx, member) container_of((clistx).next->next, typeof(*(elem)), member)
 
+#define clist_head_safe(elem, clistx, member) ({(clistx).next != NULL && (clistx).next->next ? \
+    clist_head(elem, clistx, member) : NULL;})
+
 /* return the pointer of the last element of the circular queue.
      elem is also an argument to retrieve the type of the element */
 /* member is the field of *elem used to link this list */
 #define clist_tail(elem, clistx, member) container_of((clistx).next, typeof(*(elem)), member)
+
+#define clist_tail_safe(elem, clistx, member) ({(clistx).next != NULL ? \
+    clist_tail(elem, clistx, member) : NULL;})
 
 #define clist_next(elem, member) container_of((elem)->member.next, typeof(*(elem)), member)
 
@@ -66,29 +77,42 @@ struct clist {
 /* delete the first element of the list (this macro does not return any value) */
 /* clistp is the address of the tail pointer (struct clist *) */
 #define clist_pop(clistp) clist_dequeue(clistp)
-#define clist_dequeue(clistp) do { \
-    if(clist_empty(*(clistp))) break; \
-    if((clistp)->next == (clistp)->next->next) { \
-        (clistp)->next = NULL; \
-    } else { \
-        (clistp)->next->next = (clistp)->next->next->next; \
-    } \
-} while (0)
+#define clist_dequeue(clistp) __clist_dequeue(clistp)
+
+static inline void __clist_dequeue(struct clist *list) {
+    if (clist_empty(*list)) return;
+    if (list->next == list->next->next) {
+        list->next = NULL;
+    } else {
+        list->next->next = list->next->next->next;
+    }
+}
 
 /* delete from a circular list the element whose pointer is elem */
 /* clistp is the address of the tail pointer (struct clist *) */
 /* member is the field of *elem used to link this list */
-#define clist_delete(elem, clistp, member) ({ \
-    typeof(elem) s; \
-    struct clist *t; \
-    int ret = 1; \
-    clist_foreach(s, clistp, member, t) { \
-        if(elem == s) { \
-            clist_foreach_delete(s, clistp, member, t); \
-            ret = 0; \
-        } \
-    } \
-    ret;})
+#define clist_delete(elem, clistp, member) __clist_delete_first(&((elem)->member), clistp)
+
+static inline int __clist_delete(struct clist *elem, struct clist *list, struct clist *head) {
+    if (list->next == head) return 1;
+    if (list->next->next == elem) {
+        list->next->next = list->next->next->next;
+        return 0;
+    }
+    return __clist_delete(elem, list->next, head);
+}
+
+static inline int __clist_delete_first(struct clist *elem, struct clist *list) {
+    if (clist_empty(*list)) return 1;
+    if (list->next == list->next->next) {
+        if (list->next == elem) {
+            list->next = NULL;
+            return 0;
+        }
+        return 1;
+    }
+    return __clist_delete(elem, list->next, list);
+}
 
 /* this macro has been designed to be used as a for instruction,
      the instruction (or block) following clist_foreach will be repeated for each element
@@ -108,20 +132,24 @@ struct clist {
 
 /* this macro should be used *inside* a clist_foreach loop to delete the
      current element */
-#define clist_foreach_delete(scan, clistp, member, tmp) do { \
-    if((clistp)->next == (clistp)->next->next) { \
-        (clistp)->next = NULL; \
-    } else { \
-        ((struct clist *)(tmp))->next = (scan)->member.next; \
-    } \
-} while (0)
+#define clist_foreach_delete(scan, clistp, member, tmp) __clist_foreach_delete(&((scan)->member), clistp, (struct clist *)(tmp))
+
+static inline void __clist_foreach_delete(struct clist *scan, struct clist *list, struct clist *tmp) {
+    if (list->next == list->next->next) {
+        list->next = NULL;
+    } else {
+        tmp->next = scan->next;
+    }
+}
 
 /* this macro should be used *inside* a clist_foreach loop to add an element
     before the current one */
-#define clist_foreach_add(elem, scan, clistp, member, tmp) do { \
-    (elem)->member.next = &((scan)->member); \
-    ((struct clist *)(tmp))->next = &((elem)->member); \
-    (tmp) = &((elem)->member); \
-} while (0)
+#define clist_foreach_add(elem, scan, clistp, member, tmp) __clist_foreach_add(&((elem)->member), &((scan)->member), (struct clist *)(tmp))
+
+static inline void __clist_foreach_add(struct clist *elem, struct clist *scan, struct clist *tmp) {
+    elem->next = scan;
+    tmp->next = elem;
+    tmp = elem;
+}
 
 #endif
