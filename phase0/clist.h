@@ -128,6 +128,9 @@ static inline void __clist_foreach_delete(struct clist *scan, struct clist *list
         list->next = NULL;
     } else {
         tmp->next = scan->next;
+        if (list->next == scan) {
+            list->next = tmp;
+        }
     }
 }
 
