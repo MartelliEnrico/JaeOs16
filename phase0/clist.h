@@ -91,28 +91,17 @@ static inline void __clist_dequeue(struct clist *list) {
 /* delete from a circular list the element whose pointer is elem */
 /* clistp is the address of the tail pointer (struct clist *) */
 /* member is the field of *elem used to link this list */
-#define clist_delete(elem, clistp, member) __clist_delete_first(&((elem)->member), clistp)
-
-static inline int __clist_delete(struct clist *elem, struct clist *list, struct clist *head) {
-    if (list->next == head) return 1;
-    if (list->next->next == elem) {
-        list->next->next = list->next->next->next;
-        return 0;
-    }
-    return __clist_delete(elem, list->next, head);
-}
-
-static inline int __clist_delete_first(struct clist *elem, struct clist *list) {
-    if (clist_empty(*list)) return 1;
-    if (list->next == list->next->next) {
-        if (list->next == elem) {
-            list->next = NULL;
-            return 0;
-        }
-        return 1;
-    }
-    return __clist_delete(elem, list->next, list);
-}
+#define clist_delete(elem, clistp, member) ({ \
+    typeof(elem) s; \
+    struct clist *t; \
+    int ret = 1; \
+    clist_foreach(s, clistp, member, t) { \
+        if(elem == s) { \
+            clist_foreach_delete(s, clistp, member, t); \
+            ret = 0; \
+        } \
+    } \
+    ret;})
 
 /* this macro has been designed to be used as a for instruction,
      the instruction (or block) following clist_foreach will be repeated for each element
