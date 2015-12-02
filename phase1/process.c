@@ -8,6 +8,6 @@ struct pcb_t *allocPcb() {
     // @TODO: implement allocPcb
 }
 
-void freePcb(struct pcb_t *pcb) {
+void freePcb(struct pcb_t *p) {
     // @TODO: implement freePcb
 }
