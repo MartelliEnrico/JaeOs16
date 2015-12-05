@@ -15,8 +15,6 @@ struct clist {
     struct clist *next;
 };
 
-#define in(...) struct clist __VA_ARGS__
-
 /* constant used to initialize an empty list */
 #define CLIST_INIT {NULL}
 

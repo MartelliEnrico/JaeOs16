@@ -7,7 +7,7 @@ struct clist myclist = CLIST_INIT;
 
 struct clistofint {
 	int value;
-	in(list);
+	struct clist list;
 };
 
 char buf[LEN];
