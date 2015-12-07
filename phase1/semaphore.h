@@ -4,6 +4,8 @@
 
 static struct semd_t semdTable[MAXPROC];
 
+static struct clist aslh;
+
 /*
  * Function: initASL
  * -----------------
