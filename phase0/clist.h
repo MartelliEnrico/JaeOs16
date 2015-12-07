@@ -58,16 +58,10 @@ static inline void __clist_push(struct clist *elem, struct clist *list) {
 /* member is the field of *elem used to link this list */
 #define clist_head(elem, clistx, member) container_of((clistx).next->next, typeof(*(elem)), member)
 
-#define clist_head_safe(elem, clistx, member) ({(clistx).next != NULL && (clistx).next->next ? \
-    clist_head(elem, clistx, member) : NULL;})
-
 /* return the pointer of the last element of the circular queue.
      elem is also an argument to retrieve the type of the element */
 /* member is the field of *elem used to link this list */
 #define clist_tail(elem, clistx, member) container_of((clistx).next, typeof(*(elem)), member)
-
-#define clist_tail_safe(elem, clistx, member) ({(clistx).next != NULL ? \
-    clist_tail(elem, clistx, member) : NULL;})
 
 #define clist_next(elem, member) container_of((elem)->member.next, typeof(*(elem)), member)
 
