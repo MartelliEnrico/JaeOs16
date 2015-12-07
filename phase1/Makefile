@@ -3,7 +3,7 @@
 all: p1test
 
 p1test:
-	arm-none-eabi-gcc p1test.c -I. -o p1test --specs=nosys.specs
+	arm-none-eabi-gcc -I. -xc --specs=nosys.specs -o p1test p1test.c process.c tree.c queue.c semaphore.c
 
 clean:
 	rm p1test
