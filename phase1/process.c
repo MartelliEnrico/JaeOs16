@@ -1,6 +1,8 @@
 #include "process.h"
 
 void initPcbs() {
+    static struct pcb_t pcbTable[MAXPROC];
+
     // @TODO: implement initPcbs
 }
 

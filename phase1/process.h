@@ -7,7 +7,6 @@
 #include "tree.h"
 #include "semaphore.h"
 
-static struct pcb_t pcbTable[MAXPROC];
 static struct clist pcbFree;
 
 /*

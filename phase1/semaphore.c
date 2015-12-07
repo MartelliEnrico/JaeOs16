@@ -1,6 +1,8 @@
 #include "semaphore.h"
 
 void initASL() {
+    static struct semd_t semdTable[MAXPROC];
+
     // @TODO: implement initASL
 }
 
