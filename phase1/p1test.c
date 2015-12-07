@@ -1,4 +1,4 @@
-#include "process.c"
+#include "process.h"
 
 main() {
 
