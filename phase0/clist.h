@@ -16,7 +16,7 @@ struct clist {
 };
 
 /* constant used to initialize an empty list */
-#define CLIST_INIT {NULL}
+#define CLIST_INIT (struct clist){NULL}
 
 /* clist_empty returns true in the circular list is empty, false otherwise */
 /* clistx is a struct clist */
@@ -102,9 +102,10 @@ static inline void __clist_dequeue(struct clist *list) {
 /* member is the field of *elem used to link this list */
 /* tmp is a void * temporary variable */
 #define clist_foreach(scan, clistp, member, tmp) if(!clist_empty(*(clistp))) \
-    for((scan) = clist_head(scan, *(clistp), member), (tmp) = (clistp)->next; ; \
-        ({if(clist_empty(*(clistp)) || &(scan)->member == (clistp)->next) {(tmp) = NULL; break;} \
-            else (tmp) = &((scan)->member), (scan) = clist_next(scan, member);}))
+    for((scan) = clist_head(scan, *(clistp), member), (tmp) = (clistp)->next; \
+        !clist_empty(*(clistp)) && (tmp) != NULL; \
+        (tmp) = (&(scan)->member == (clistp)->next) ? NULL : \
+             &((scan)->member), (scan) = clist_next(scan, member))
 
 /* this macro should be used after the end of a clist_foreach cycle
      using the same args. it returns false if the cycle terminated by a break,
