@@ -92,7 +92,9 @@ struct pcb_t *headBlocked(int *semAdd) {
                 return NULL;
             }
 
-            return clist_head(&(scan->s_procq), scan->s_procq, p_list);
+            struct pcb_t *elem;
+
+            return clist_head(elem, scan->s_procq, p_list);
         }
     }
 
