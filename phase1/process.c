@@ -2,8 +2,9 @@
 
 void initPcbs() {
     static struct pcb_t pcbTable[MAXPROC];
+    int i;
 
-    for (int i = 0; i < MAXPROC; i++) {
+    for (i = 0; i < MAXPROC; i++) {
         clist_enqueue(&pcbTable[i], &pcbFree, p_list);
     }
 }
