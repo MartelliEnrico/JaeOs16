@@ -7,7 +7,8 @@
 #include "tree.h"
 #include "semaphore.h"
 
-static struct clist pcbFree[MAXPROC];
+static struct pcb_t pcbTable[MAXPROC];
+static struct clist pcbFree;
 
 /*
  * Function: initPcbs

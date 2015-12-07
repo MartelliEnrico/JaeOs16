@@ -3,6 +3,7 @@
 #include "process.h"
 
 static struct semd_t semdTable[MAXPROC];
+static struct clist semdFree;
 
 static struct clist aslh;
 
