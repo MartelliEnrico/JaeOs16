@@ -7,8 +7,6 @@
 #include "tree.h"
 #include "semaphore.h"
 
-static struct clist pcbFree;
-
 /*
  * Function: initPcbs
  * ------------------

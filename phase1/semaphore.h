@@ -2,10 +2,6 @@
 
 #include "process.h"
 
-static struct clist semdFree;
-
-static struct clist aslh;
-
 /*
  * Function: initASL
  * -----------------
