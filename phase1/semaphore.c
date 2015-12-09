@@ -1,5 +1,9 @@
 #include "semaphore.h"
 
+static struct clist semdFree;
+
+static struct clist aslh;
+
 void initASL() {
     static struct semd_t semdTable[MAXPROC];
 

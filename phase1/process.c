@@ -1,5 +1,7 @@
 #include "process.h"
 
+static struct clist pcbFree;
+
 void initPcbs() {
     static struct pcb_t pcbTable[MAXPROC];
 
