@@ -20,6 +20,7 @@ static inline struct semd_t *__newSemdFromList(struct semd_t *elem, int *semAdd,
     elem->s_semAdd = semAdd;
     elem->s_procq = CLIST_INIT;
 
+    p->p_cursem = elem;
     clist_enqueue(p, &(elem->s_procq), p_list);
 }
 
@@ -29,6 +30,7 @@ int insertBlocked(int *semAdd, struct pcb_t *p) {
 
     clist_foreach(scan, &aslh, s_link, tmp) {
         if (semAdd == scan->s_semAdd) {
+            p->p_cursem = scan;
             clist_enqueue(p, &(scan->s_procq), p_list);
             break;
         }
@@ -75,6 +77,8 @@ struct pcb_t * removeBlocked(int *semAdd) {
                 clist_enqueue(scan, &semdFree, s_link);
             }
 
+            elem->p_cursem = NULL;
+
             return elem;
         }
     }
@@ -83,7 +87,14 @@ struct pcb_t * removeBlocked(int *semAdd) {
 }
 
 struct pcb_t *outBlocked(struct pcb_t *p) {
-    // @TODO: implement outBlocked
+    if (p->p_cursem == NULL) {
+        return NULL;
+    }
+
+    clist_delete(p, &(p->p_cursem->s_procq), p_list);
+    p->p_cursem = NULL;
+
+    return p;
 }
 
 struct pcb_t *headBlocked(int *semAdd) {
