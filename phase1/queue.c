@@ -2,8 +2,6 @@
 
 void insertProcQ(struct clist *q, struct pcb_t *p) {
     clist_enqueue(p, q, p_siblings);
-
-    p->p_parent = container_of(q, struct pcb_t, p_children);
 }
 
 struct pcb_t *removeProcQ(struct clist *q) {
@@ -15,8 +13,6 @@ struct pcb_t *removeProcQ(struct clist *q) {
     elem = clist_head(elem, *q, p_siblings);
     clist_dequeue(q);
 
-    elem->p_parent = NULL;
-
     return elem;
 }
 
@@ -27,8 +23,6 @@ struct pcb_t *outProcQ(struct clist *q, struct pcb_t *p) {
     clist_foreach(scan, q, p_siblings, tmp) {
         if (p == scan) {
             clist_foreach_delete(scan, q, p_siblings, tmp);
-
-            p->p_parent = NULL;
 
             return p;
         }
