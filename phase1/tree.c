@@ -15,7 +15,7 @@ struct pcb_t *removeChild(struct pcb_t *p) {
 
     struct pcb_t *elem;
     elem = clist_head(elem, p->p_children, p_siblings);
-    clist_dequeue(q);
+    clist_dequeue(&(p->p_children));
 
     elem->p_parent = NULL;
 
@@ -26,9 +26,9 @@ struct pcb_t *outChild(struct pcb_t *p) {
     struct pcb_t *scan;
     void *tmp = NULL;
 
-    clist_foreach(scan, p->p_parent, p_siblings, tmp) {
+    clist_foreach(scan, &(p->p_parent->p_children), p_siblings, tmp) {
         if (p == scan) {
-            clist_foreach_delete(scan, p->p_parent, p_siblings, tmp);
+            clist_foreach_delete(scan, &(p->p_parent->p_children), p_siblings, tmp);
 
             p->p_parent = NULL;
 
