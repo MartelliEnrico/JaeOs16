@@ -92,6 +92,12 @@ struct pcb_t *outBlocked(struct pcb_t *p) {
     }
 
     clist_delete(p, &(p->p_cursem->s_procq), p_list);
+
+    if (clist_empty(p->p_cursem->s_procq)) {
+        clist_delete(p->p_cursem, &aslh, s_link);
+        clist_enqueue(p->p_cursem, &semdFree, s_link);
+    }
+
     p->p_cursem = NULL;
 
     return p;

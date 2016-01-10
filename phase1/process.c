@@ -22,7 +22,6 @@ struct pcb_t *allocPcb() {
 
     elem->p_parent = NULL;
     elem->p_cursem = NULL;
-    elem->p_s = NULL;
     elem->p_list = CLIST_INIT;
     elem->p_children = CLIST_INIT;
     elem->p_siblings = CLIST_INIT;
