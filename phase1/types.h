@@ -1,9 +1,10 @@
 #pragma once
 
+#include <uARMtypes.h>
+
 #include "../phase0/clist.h"
 
 typedef unsigned int size_t;
-typedef void * state_t;
 
 struct pcb_t {
     struct pcb_t *p_parent; /* pointer to parent */
