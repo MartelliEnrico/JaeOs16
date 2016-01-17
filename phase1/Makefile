@@ -1,9 +1,20 @@
-.phony: all clean
+BIN = p1test
+GCC = arm-none-eabi-gcc
+CFLAGS = --specs=nosys.specs -mcpu=arm7tdmi -I/usr/local/include/uarm -Wall -c
+LD = arm-none-eabi-ld
+LDFLAGS = -T /usr/local/include/uarm/ldscripts/elf32ltsarm.h.uarmcore.x
 
-all: p1test
+OBJS = $(patsubst %.c, %.o, $(wildcard ./*.c))
 
-p1test:
-	arm-none-eabi-gcc -I. -I/usr/local/include/uarm -xc --specs=nosys.specs -o p1test p1test.c process.c tree.c queue.c semaphore.c
+all: $(OBJS)
+	$(LD) $(LDFLAGS) -o $(BIN) /usr/local/include/uarm/crtso.o /usr/local/include/uarm/libuarm.o $(OBJS)
+	elf2uarm -k $(BIN)
+
+%.o: %.c
+	$(GCC) $(CFLAGS) $< -o $@
+
+%.o: %.c %.h
+	$(GCC) $(CFLAGS) $< -o $@
 
 clean:
-	rm p1test
+	rm -f $(BIN) *.o

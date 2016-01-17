@@ -1,6 +1,8 @@
 phase0/p0test
 phase1/p1test
 
+*.uarm
+
 # Object files
 *.o
 *.ko

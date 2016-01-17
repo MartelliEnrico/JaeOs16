@@ -1,5 +1,7 @@
 #include "semaphore.h"
 
+#include <libuarm.h>
+
 static struct clist semdFree;
 
 static struct clist aslh;
@@ -13,7 +15,7 @@ void initASL() {
     }
 }
 
-static inline struct semd_t *__newSemdFromList(struct semd_t *elem, int *semAdd, struct pcb_t *p) {
+static inline void __newSemdFromList(struct semd_t *elem, int *semAdd, struct pcb_t *p) {
     elem = clist_head(elem, semdFree, s_link);
     clist_dequeue(&semdFree);
 
@@ -40,7 +42,7 @@ int insertBlocked(int *semAdd, struct pcb_t *p) {
                 return TRUE;
             }
 
-            struct semd_t *elem;
+            struct semd_t *elem = NULL;
             __newSemdFromList(elem, semAdd, p);
 
             clist_foreach_add(elem, scan, &aslh, s_link, tmp);
@@ -53,7 +55,7 @@ int insertBlocked(int *semAdd, struct pcb_t *p) {
             return TRUE;
         }
 
-        struct semd_t *elem;
+        struct semd_t *elem = NULL;
         __newSemdFromList(elem, semAdd, p);
 
         clist_enqueue(elem, &aslh, s_link);
