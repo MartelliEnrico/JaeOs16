@@ -22,8 +22,8 @@
  *
  *	Test program for the modules ASL and pcbQueues (phase 1).
  *
- *	Produces progress messages on terminal 0 
- * 	Error messages will also appear on terminal 0 
+ *	Produces progress messages on terminal 0
+ * 	Error messages will also appear on terminal 0
  *	Aborts as soon as an error is detected.
  */
 
@@ -31,14 +31,9 @@
 #include <uARMtypes.h>
 #include <libuarm.h>
 
-/*
 #include "const.h"
 
-#include "clist.h"
-#include "pcb.h"
-#include "asl.h"
-*/
-
+#include "../phase0/clist.h"
 #include "process.h"
 #include "semaphore.h"
 
@@ -66,7 +61,7 @@ void adderrbuf(char *strp) {
 
 int main() {
 	int i;
-	struct clist empty=CLIST_INIT;
+	struct clist empty = CLIST_INIT;
 
 	initPcbs();
 	addokbuf("Initialized process control blocks   \n");
@@ -87,30 +82,30 @@ int main() {
 	addokbuf("freed 10 entries   \n");
 
 	/* create a 10-element process queue */
-	qa=empty;
+	qa = empty;
 	if (!clist_empty(qa)) adderrbuf("clist_empty(qa): unexpected FALSE   ");
 	addokbuf("Inserting...   \n");
 	for (i = 0; i < 10; i++) {
 		if ((q = allocPcb()) == NULL)
 			adderrbuf("allocPcb(): unexpected NULL while insert   ");
 		switch (i) {
-			case 0:
-				firstproc = q;
-				break;
-			case 5:
-				midproc = q;
-				break;
-			case 9:
-				lastproc = q;
-				break;
-			default:
-				break;
+		case 0:
+			firstproc = q;
+			break;
+		case 5:
+			midproc = q;
+			break;
+		case 9:
+			lastproc = q;
+			break;
+		default:
+			break;
 		}
 		insertProcQ(&qa, q);
 	}
 	addokbuf("inserted 10 elements   \n");
 
-	if (clist_empty(qa)) adderrbuf("clist_empty(qa): unexpected TRUE"   );
+	if (clist_empty(qa)) adderrbuf("clist_empty(qa): unexpected TRUE   ");
 
 	/* Check outProcQ and headProcQ */
 	if (headProcQ(&qa) != firstproc)
@@ -118,7 +113,7 @@ int main() {
 
 	q = outProcQ(&qa, firstproc);
 	if ((q == NULL) || (q != firstproc))
-		adderrbuf("outProcQ(&qa, firstproc) failed on first entry   ");		
+		adderrbuf("outProcQ(&qa, firstproc) failed on first entry   ");
 	freePcb(q);
 
 	q = outProcQ(&qa, midproc);
@@ -192,7 +187,7 @@ int main() {
 	addokbuf("insertChild(), removeChild() and emptyChild() ok   \n");
 	addokbuf("process tree module ok      \n");
 
-	for (i = 0; i < 10; i++) 
+	for (i = 0; i < 10; i++)
 		freePcb(procp[i]);
 
 
@@ -218,20 +213,20 @@ int main() {
 	p = removeBlocked(&sem[11]);
 	if (p == NULL)
 		adderrbuf("removeBlocked(): no process removed     ");
-	if (insertBlocked(&sem[11],p))
+	if (insertBlocked(&sem[11], p))
 		adderrbuf("removeBlocked(): fails to return to free list   ");
 
 	if (insertBlocked(&onesem, procp[9]) == FALSE)
 		adderrbuf("insertBlocked(): inserted more than MAXPROC   ");
 
 	addokbuf("removeBlocked() test started   \n");
-	for (i = 10; i< MAXPROC; i++) {
+	for (i = 10; i < MAXPROC; i++) {
 		q = removeBlocked(&sem[i]);
 		if (q == NULL)
 			adderrbuf("removeBlocked(): wouldn't remove   ");
 		if (q != procp[i])
 			adderrbuf("removeBlocked(): removed wrong element   ");
-		if (insertBlocked(&sem[i-10], q))
+		if (insertBlocked(&sem[i - 10], q))
 			adderrbuf("insertBlocked(3): unexpected TRUE   ");
 	}
 	if (removeBlocked(&sem[11]) != NULL)
