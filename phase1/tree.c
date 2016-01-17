@@ -5,6 +5,7 @@ int emptyChild(struct pcb_t *p) {
 }
 
 void insertChild(struct pcb_t *parent, struct pcb_t *p) {
+    clist_enqueue(p, &(parent->p_children), p_siblings);
     p->p_parent = parent;
 }
 
@@ -13,7 +14,7 @@ struct pcb_t *removeChild(struct pcb_t *p) {
         return NULL;
     }
 
-    struct pcb_t *elem;
+    struct pcb_t *elem = NULL;
     elem = clist_head(elem, p->p_children, p_siblings);
     clist_dequeue(&(p->p_children));
 
