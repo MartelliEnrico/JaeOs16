@@ -15,17 +15,6 @@ void initASL() {
     }
 }
 
-static inline void __newSemdFromList(struct semd_t *elem, int *semAdd, struct pcb_t *p) {
-    elem = clist_head(elem, semdFree, s_link);
-    clist_dequeue(&semdFree);
-
-    elem->s_semAdd = semAdd;
-    elem->s_procq = CLIST_INIT;
-
-    p->p_cursem = elem;
-    clist_enqueue(p, &(elem->s_procq), p_list);
-}
-
 int insertBlocked(int *semAdd, struct pcb_t *p) {
     struct semd_t *scan;
     void *tmp = NULL;
