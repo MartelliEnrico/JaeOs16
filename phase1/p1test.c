@@ -33,7 +33,7 @@
 
 #include "const.h"
 
-#include "../phase0/clist.h"
+#include "clist.h"
 #include "process.h"
 #include "semaphore.h"
 
