@@ -21,4 +21,4 @@ all: $(OBJS)
 	$(GCC) $(CFLAGS) $< -o $@
 
 clean:
-	rm -f $(BIN) *.o
+	rm -f $(BIN) *.o *.uarm
