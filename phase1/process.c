@@ -21,6 +21,8 @@ struct pcb_t *allocPcb() {
     struct pcb_t *elem = clist_head(elem, pcbFree, p_list);
     clist_dequeue(&pcbFree);
 
+    // Reset all struct parameters to defaults value to prevent data leaks
+    // and unexpected behaviours.
     elem->p_parent = NULL;
     elem->p_cursem = NULL;
     elem->p_list = CLIST_INIT;

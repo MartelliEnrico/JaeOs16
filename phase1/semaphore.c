@@ -22,12 +22,12 @@ int insertBlocked(int *semAdd, struct pcb_t *p) {
     struct semd_t * getSemaphoreAndInit() {
         struct semd_t *elem = clist_head(elem, semdFree, s_link);
         clist_dequeue(&semdFree);
+        clist_enqueue(p, &(elem->s_procq), p_list);
 
+        // Reset parameters to default values.
         elem->s_semAdd = semAdd;
         elem->s_procq = CLIST_INIT;
-
         p->p_cursem = elem;
-        clist_enqueue(p, &(elem->s_procq), p_list);
 
         return elem;
     }
@@ -70,6 +70,7 @@ struct pcb_t * removeBlocked(int *semAdd) {
             clist_dequeue(&(scan->s_procq));
 
             if (clist_empty(scan->s_procq)) {
+                // Move semaphore from the active list, to the free list.
                 clist_foreach_delete(scan, &aslh, s_link, tmp);
                 clist_enqueue(scan, &semdFree, s_link);
             }
@@ -91,6 +92,7 @@ struct pcb_t *outBlocked(struct pcb_t *p) {
     clist_delete(p, &(p->p_cursem->s_procq), p_list);
 
     if (clist_empty(p->p_cursem->s_procq)) {
+        // Move semaphore from the active list, to the free list.
         clist_delete(p->p_cursem, &aslh, s_link);
         clist_enqueue(p->p_cursem, &semdFree, s_link);
     }
