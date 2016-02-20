@@ -19,6 +19,19 @@ int insertBlocked(int *semAdd, struct pcb_t *p) {
     struct semd_t *scan;
     void *tmp = NULL;
 
+    struct semd_t * getSemaphoreAndInit() {
+        struct semd_t *elem = clist_head(elem, semdFree, s_link);
+        clist_dequeue(&semdFree);
+
+        elem->s_semAdd = semAdd;
+        elem->s_procq = CLIST_INIT;
+
+        p->p_cursem = elem;
+        clist_enqueue(p, &(elem->s_procq), p_list);
+
+        return elem;
+    }
+
     clist_foreach(scan, &aslh, s_link, tmp) {
         if (semAdd == scan->s_semAdd) {
             p->p_cursem = scan;
@@ -31,16 +44,7 @@ int insertBlocked(int *semAdd, struct pcb_t *p) {
                 return TRUE;
             }
 
-            struct semd_t *elem = clist_head(elem, semdFree, s_link);
-            clist_dequeue(&semdFree);
-
-            elem->s_semAdd = semAdd;
-            elem->s_procq = CLIST_INIT;
-
-            p->p_cursem = elem;
-            clist_enqueue(p, &(elem->s_procq), p_list);
-
-            clist_foreach_add(elem, scan, &aslh, s_link, tmp);
+            clist_foreach_add(getSemaphoreAndInit(), scan, &aslh, s_link, tmp);
             break;
         }
     }
@@ -50,16 +54,7 @@ int insertBlocked(int *semAdd, struct pcb_t *p) {
             return TRUE;
         }
 
-        struct semd_t *elem = clist_head(elem, semdFree, s_link);
-        clist_dequeue(&semdFree);
-
-        elem->s_semAdd = semAdd;
-        elem->s_procq = CLIST_INIT;
-
-        p->p_cursem = elem;
-        clist_enqueue(p, &(elem->s_procq), p_list);
-
-        clist_enqueue(elem, &aslh, s_link);
+        clist_enqueue(getSemaphoreAndInit(), &aslh, s_link);
     }
 
     return FALSE;
