@@ -1,4 +1,6 @@
 #include "tree.h"
+#include "clist.h"
+#include "types.h"
 
 int emptyChild(struct pcb_t *p) {
     return clist_empty(p->p_children) ? TRUE : FALSE;

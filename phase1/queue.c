@@ -1,4 +1,6 @@
 #include "queue.h"
+#include "clist.h"
+#include "types.h"
 
 void insertProcQ(struct clist *q, struct pcb_t *p) {
     clist_enqueue(p, q, p_siblings);

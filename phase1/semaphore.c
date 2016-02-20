@@ -1,6 +1,6 @@
 #include "semaphore.h"
-
-#include <libuarm.h>
+#include "clist.h"
+#include "types.h"
 
 static struct clist semdFree;
 

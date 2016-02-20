@@ -1,4 +1,6 @@
 #include "process.h"
+#include "clist.h"
+#include "types.h"
 
 static struct clist pcbFree;
 
