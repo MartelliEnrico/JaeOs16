@@ -11,8 +11,7 @@ struct pcb_t *removeProcQ(struct clist *q) {
         return NULL;
     }
 
-    struct pcb_t *elem;
-    elem = clist_head(elem, *q, p_siblings);
+    struct pcb_t *elem = clist_head(elem, *q, p_siblings);
     clist_dequeue(q);
 
     return elem;
@@ -38,6 +37,7 @@ struct pcb_t *headProcQ(struct clist *q) {
         return NULL;
     }
 
-    struct pcb_t *elem;
-    return clist_head(elem, *q, p_siblings);
+    struct pcb_t *elem = clist_head(elem, *q, p_siblings);
+
+    return elem;
 }

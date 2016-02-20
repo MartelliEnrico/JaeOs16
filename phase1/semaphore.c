@@ -31,8 +31,7 @@ int insertBlocked(int *semAdd, struct pcb_t *p) {
                 return TRUE;
             }
 
-            struct semd_t *elem;
-            elem = clist_head(elem, semdFree, s_link);
+            struct semd_t *elem = clist_head(elem, semdFree, s_link);
             clist_dequeue(&semdFree);
 
             elem->s_semAdd = semAdd;
@@ -51,8 +50,7 @@ int insertBlocked(int *semAdd, struct pcb_t *p) {
             return TRUE;
         }
 
-        struct semd_t *elem;
-        elem = clist_head(elem, semdFree, s_link);
+        struct semd_t *elem = clist_head(elem, semdFree, s_link);
         clist_dequeue(&semdFree);
 
         elem->s_semAdd = semAdd;
@@ -73,8 +71,7 @@ struct pcb_t * removeBlocked(int *semAdd) {
 
     clist_foreach(scan, &aslh, s_link, tmp) {
         if (semAdd == scan->s_semAdd) {
-            struct pcb_t *elem;
-            elem = clist_head(elem, scan->s_procq, p_list);
+            struct pcb_t *elem = clist_head(elem, scan->s_procq, p_list);
             clist_dequeue(&(scan->s_procq));
 
             if (clist_empty(scan->s_procq)) {
@@ -118,9 +115,9 @@ struct pcb_t *headBlocked(int *semAdd) {
                 return NULL;
             }
 
-            struct pcb_t *elem;
+            struct pcb_t *elem = clist_head(elem, scan->s_procq, p_list);
 
-            return clist_head(elem, scan->s_procq, p_list);
+            return elem;
         }
     }
 

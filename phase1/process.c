@@ -18,8 +18,7 @@ struct pcb_t *allocPcb() {
         return NULL;
     }
 
-    struct pcb_t *elem;
-    elem = clist_head(elem, pcbFree, p_list);
+    struct pcb_t *elem = clist_head(elem, pcbFree, p_list);
     clist_dequeue(&pcbFree);
 
     elem->p_parent = NULL;

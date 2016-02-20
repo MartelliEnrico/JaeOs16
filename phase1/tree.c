@@ -16,8 +16,7 @@ struct pcb_t *removeChild(struct pcb_t *p) {
         return NULL;
     }
 
-    struct pcb_t *elem = NULL;
-    elem = clist_head(elem, p->p_children, p_siblings);
+    struct pcb_t *elem = clist_head(elem, p->p_children, p_siblings);
     clist_dequeue(&(p->p_children));
 
     elem->p_parent = NULL;
