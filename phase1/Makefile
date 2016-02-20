@@ -1,8 +1,8 @@
 UNAME = $(shell uname)
 ifeq ($(UNAME), Darwin)
-	INCDIR = /usr/local/include
+	INCDIR ?= /usr/local/include
 else
-	INCDIR = /usr/include
+	INCDIR ?= /usr/include
 endif
 
 BIN = p1test
