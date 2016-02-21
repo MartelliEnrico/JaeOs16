@@ -22,12 +22,13 @@ int insertBlocked(int *semAdd, struct pcb_t *p) {
     struct semd_t * getSemaphoreAndInit() {
         struct semd_t *elem = clist_head(elem, semdFree, s_link);
         clist_dequeue(&semdFree);
-        clist_enqueue(p, &(elem->s_procq), p_list);
 
         // Reset parameters to default values.
         elem->s_semAdd = semAdd;
         elem->s_procq = CLIST_INIT;
+
         p->p_cursem = elem;
+        clist_enqueue(p, &(elem->s_procq), p_list);
 
         return elem;
     }
