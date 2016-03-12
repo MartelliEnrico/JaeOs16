@@ -44,9 +44,7 @@ int insertBlocked(int *semAdd, struct pcb_t *p) {
             p->p_cursem = scan;
             clist_enqueue(p, &(scan->s_procq), p_list);
             break;
-        }
-
-        if (semAdd < scan->s_semAdd) {
+        } else if (scan->s_semAdd > semAdd) {
             if (clist_empty(semdFree)) {
                 return TRUE;
             }
@@ -85,6 +83,8 @@ struct pcb_t * removeBlocked(int *semAdd) {
             elem->p_cursem = NULL;
 
             return elem;
+        } else if (scan->s_semAdd > semAdd) {
+            break;
         }
     }
 
@@ -122,6 +122,8 @@ struct pcb_t *headBlocked(int *semAdd) {
             struct pcb_t *elem = clist_head(elem, scan->s_procq, p_list);
 
             return elem;
+        } else if (scan->s_semAdd > semAdd) {
+            break;
         }
     }
 
