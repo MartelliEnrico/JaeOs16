@@ -18,9 +18,6 @@ struct pcb_t *removeProcQ(struct clist *q) {
 }
 
 struct pcb_t *outProcQ(struct clist *q, struct pcb_t *p) {
-    struct pcb_t *scan;
-    void *tmp = NULL;
-
     if (clist_delete(p, q, p_siblings)) {
         return p;
     }

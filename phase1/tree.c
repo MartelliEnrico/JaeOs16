@@ -25,9 +25,6 @@ struct pcb_t *removeChild(struct pcb_t *p) {
 }
 
 struct pcb_t *outChild(struct pcb_t *p) {
-    struct pcb_t *scan;
-    void *tmp = NULL;
-
     if (clist_delete(p, &(p->p_parent->p_children), p_siblings)) {
         p->p_parent = NULL;
 
