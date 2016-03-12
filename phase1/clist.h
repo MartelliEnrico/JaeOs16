@@ -91,6 +91,7 @@ static inline void __clist_dequeue(struct clist *list) {
         if(elem == s) { \
             clist_foreach_delete(s, clistp, member, t); \
             ret = 0; \
+            break; \
         } \
     } \
     ret;})
