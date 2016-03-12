@@ -7,7 +7,7 @@ endif
 
 BIN = p1test
 GCC = arm-none-eabi-gcc
-CFLAGS = -O2 --specs=nosys.specs -mcpu=arm7tdmi -I$(INCDIR)/uarm -Wall -c
+CFLAGS = -O2 -mcpu=arm7tdmi -I$(INCDIR)/uarm -Wall -c
 LD = arm-none-eabi-ld
 LDFLAGS = -T $(INCDIR)/uarm/ldscripts/elf32ltsarm.h.uarmcore.x
 
