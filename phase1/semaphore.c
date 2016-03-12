@@ -2,6 +2,12 @@
 #include "clist.h"
 #include "types.h"
 
+struct semd_t {
+    int *s_semAdd; /* pointer to the semaphore */
+    struct clist s_link; /* ASL linked list */
+    struct clist s_procq; /* blocked process queue */
+};
+
 static struct clist semdFree;
 
 static struct clist aslh;

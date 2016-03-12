@@ -14,9 +14,3 @@ struct pcb_t {
     struct clist p_children; /* children list entry point*/
     struct clist p_siblings; /* children list: links to the siblings */
 };
-
-struct semd_t {
-    int *s_semAdd; /* pointer to the semaphore */
-    struct clist s_link; /* ASL linked list */
-    struct clist s_procq; /* blocked process queue */
-};
