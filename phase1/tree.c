@@ -28,14 +28,10 @@ struct pcb_t *outChild(struct pcb_t *p) {
     struct pcb_t *scan;
     void *tmp = NULL;
 
-    clist_foreach(scan, &(p->p_parent->p_children), p_siblings, tmp) {
-        if (p == scan) {
-            clist_foreach_delete(scan, &(p->p_parent->p_children), p_siblings, tmp);
+    if (clist_delete(p, &(p->p_parent->p_children), p_siblings)) {
+        p->p_parent = NULL;
 
-            p->p_parent = NULL;
-
-            return p;
-        }
+        return p;
     }
 
     return NULL;

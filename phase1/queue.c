@@ -21,12 +21,8 @@ struct pcb_t *outProcQ(struct clist *q, struct pcb_t *p) {
     struct pcb_t *scan;
     void *tmp = NULL;
 
-    clist_foreach(scan, q, p_siblings, tmp) {
-        if (p == scan) {
-            clist_foreach_delete(scan, q, p_siblings, tmp);
-
-            return p;
-        }
+    if (clist_delete(p, q, p_siblings)) {
+        return p;
     }
 
     return NULL;
