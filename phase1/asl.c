@@ -2,6 +2,7 @@
 
 #include "types.h"
 #include "clist.h"
+#include "consts.h"
 
 struct semd_t {
     int *s_semAdd; /* pointer to the semaphore */

@@ -2,6 +2,7 @@
 
 #include "types.h"
 #include "clist.h"
+#include "consts.h"
 
 static struct clist pcbFree;
 
