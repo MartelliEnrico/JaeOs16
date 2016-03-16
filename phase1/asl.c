@@ -1,6 +1,7 @@
-#include "semaphore.h"
-#include "clist.h"
+#include "asl.h"
+
 #include "types.h"
+#include "clist.h"
 
 struct semd_t {
     int *s_semAdd; /* pointer to the semaphore */

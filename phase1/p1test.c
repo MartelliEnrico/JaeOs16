@@ -34,8 +34,8 @@
 #include "const.h"
 
 #include "clist.h"
-#include "process.h"
-#include "semaphore.h"
+#include "pcb.h"
+#include "asl.h"
 
 #define	MAXSEM	MAXPROC
 
