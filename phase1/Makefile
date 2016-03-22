@@ -1,5 +1,4 @@
-UNAME = $(shell uname)
-ifeq ($(UNAME), Darwin)
+ifeq ($(shell uname), Darwin)
 	INCDIR ?= /usr/local/include
 else
 	INCDIR ?= /usr/include
