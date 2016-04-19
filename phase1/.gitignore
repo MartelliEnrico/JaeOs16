@@ -1,2 +1,3 @@
 build/
-term0.uarm
+tests/term0.uarm
+tests/machine.uarm.cfg
