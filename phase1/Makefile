@@ -26,9 +26,8 @@ build/%.o: src/%.c
 clean:
 	rm -f build/* tests/machine.uarm.cfg tests/term0.uarm
 
-test: tests/machine.uarm.cfg
-	@uarm -c tests/machine.uarm.cfg -e -x
-	@cmp -s tests/success.uarm tests/term0.uarm && echo "SUCCESS!" || echo "Error!!!"
+test: all tests/machine.uarm.cfg
+	@uarm -c tests/machine.uarm.cfg -e -x && echo "Ok!" || echo "Error :("
 
 tests/machine.uarm.cfg:
-	@sed -e "s|\@INCDIR\@|$(INCDIR)|g" -e "s|\@CURDIR\@|$(CURDIR)|g" tests/machine.uarm.cfg.template > tests/machine.uarm.cfg
+	@sed -e "s|\@INCDIR\@|$(INCDIR)|g" -e "s|\@CURDIR\@|$(CURDIR)|g" tests/machine.uarm.tmp > tests/machine.uarm.cfg
