@@ -14,7 +14,10 @@ LDFLAGS = -T $(INCDIR)/uarm/ldscripts/elf32ltsarm.h.uarmcore.x
 
 OBJS = $(patsubst src/%.c, build/%.o, $(wildcard src/*.c))
 
-all: $(BIN).core.uarm
+.PHONY: all clean test
+
+all: test
+	@echo "Success, test passed."
 
 $(BIN).core.uarm: $(BIN)
 	elf2uarm -k $(BIN)
@@ -28,11 +31,9 @@ build/%.o: src/%.c
 clean:
 	rm -f build/* tests/machine.uarm.cfg tests/term0.uarm
 
-test: all tests/machine.uarm.cfg
-	@echo "--- Test start"
+test: $(BIN).core.uarm tests/machine.uarm.cfg
 	@uarm -c tests/machine.uarm.cfg -e -x
-	@echo "--- Result: \c"
-	@cat tests/term0.uarm | grep -q "SYSTEM HALTED" && echo "Ok!" || echo "Error"
+	@cat tests/term0.uarm | grep -q "SYSTEM HALTED" || (echo "Test failed." && exit 1)
 
 tests/machine.uarm.cfg:
 	@sed -e "s|\@INCDIR\@|$(INCDIR)|g" -e "s|\@CURDIR\@|$(CURDIR)|g" tests/machine.uarm.tmp > tests/machine.uarm.cfg
