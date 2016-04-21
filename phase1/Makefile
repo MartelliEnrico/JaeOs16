@@ -32,8 +32,7 @@ clean:
 	rm -f build/* tests/machine.uarm.cfg tests/term0.uarm
 
 test: $(BIN).core.uarm tests/machine.uarm.cfg
-	@uarm -c tests/machine.uarm.cfg -e -x
-	@cat tests/term0.uarm | grep -q "SYSTEM HALTED" || (echo "Test failed." && exit 1)
+	@uarm -c tests/machine.uarm.cfg -e -x || (echo "Test failed." && exit 1)
 
 tests/machine.uarm.cfg:
 	@sed -e "s|\@INCDIR\@|$(INCDIR)|g" -e "s|\@CURDIR\@|$(CURDIR)|g" tests/machine.uarm.tmp > tests/machine.uarm.cfg
