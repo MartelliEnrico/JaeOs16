@@ -7,6 +7,3 @@ p0test:
 
 clean:
 	rm p0test
-
-export:
-	cp clist.h ../phase1/include/clist.h

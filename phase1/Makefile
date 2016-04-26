@@ -36,6 +36,3 @@ test: $(BIN).core.uarm tests/machine.uarm.cfg
 
 tests/machine.uarm.cfg:
 	@sed -e "s|\@INCDIR\@|$(INCDIR)|g" -e "s|\@CURDIR\@|$(CURDIR)|g" tests/machine.uarm.tmp > tests/machine.uarm.cfg
-
-export:
-	cp include/clist.h src/{const,types}.h src/{asl,pcb}.{c,h} ../phase2/include
