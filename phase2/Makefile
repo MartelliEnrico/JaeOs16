@@ -6,7 +6,7 @@ endif
 
 CURDIR = $(shell pwd)
 
-BIN = build/phase3
+BIN = build/phase2
 GCC = arm-none-eabi-gcc
 CFLAGS = -O2 -mcpu=arm7tdmi -I$(INCDIR)/uarm -Iinclude -Wall -c
 LD = arm-none-eabi-ld
@@ -16,7 +16,8 @@ OBJS = $(patsubst src/%.c, build/%.o, $(wildcard src/*.c))
 
 .PHONY: all clean
 
-all: $(BIN).core.uarm
+all: test
+	@echo "Success, test passed."
 
 $(BIN).core.uarm: $(BIN)
 	elf2uarm -k $(BIN)
@@ -28,4 +29,10 @@ build/%.o: src/%.c
 	$(GCC) $(CFLAGS) $< -o $@
 
 clean:
-	rm -f build/*
+	rm -f build/* tests/machine.uarm.cfg tests/term0.uarm
+
+test: $(BIN).core.uarm tests/machine.uarm.cfg
+	@uarm -c tests/machine.uarm.cfg -e -x || (echo "Test failed." && exit 1)
+
+tests/machine.uarm.cfg:
+	@sed -e "s|\@INCDIR\@|$(INCDIR)|g" -e "s|\@CURDIR\@|$(CURDIR)|g" tests/machine.uarm.tmp > tests/machine.uarm.cf
