@@ -1,6 +1,7 @@
 phase0/p0test
 
 /libs/*
+!.gitkeep
 
 *.uarm
 
