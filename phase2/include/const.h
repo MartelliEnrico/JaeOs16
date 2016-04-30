@@ -7,8 +7,8 @@
 #define memaddr unsigned int
 
 #ifndef TRUE
-    #define TRUE 1
-    #define FALSE 0
+#define TRUE 1
+#define FALSE 0
 #endif
 
 /* Maximum number of overall (eg, system, daemons, user) concurrent processes */
