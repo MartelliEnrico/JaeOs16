@@ -1,16 +1,13 @@
-ifeq ($(shell uname), Darwin)
-	INCDIR ?= /usr/local/include
-else
-	INCDIR ?= /usr/include
-endif
+BASEDIR ?= /usr/local
 
+INCDIR = $(BASEDIR)/include/uarm
 CURDIR = $(shell pwd)
 
 BIN = build/phase2
 GCC = arm-none-eabi-gcc
-CFLAGS = -O2 -mcpu=arm7tdmi -I$(INCDIR)/uarm -Iinclude -Wall -c
+CFLAGS = -O2 -mcpu=arm7tdmi -I$(INCDIR) -Iinclude -Wall
 LD = arm-none-eabi-ld
-LDFLAGS = -T $(INCDIR)/uarm/ldscripts/elf32ltsarm.h.uarmcore.x
+LDFLAGS = -T $(INCDIR)/ldscripts/elf32ltsarm.h.uarmcore.x
 
 OBJS = $(patsubst src/%.c, build/%.o, $(wildcard src/*.c))
 OBJS += $(patsubst include/%.c, build/%.o, $(wildcard include/*.c))
@@ -23,19 +20,21 @@ $(BIN).core.uarm: $(BIN)
 	elf2uarm -k $(BIN)
 
 $(BIN): $(OBJS)
-	$(LD) $(LDFLAGS) -o $(BIN) $(INCDIR)/uarm/crtso.o $(INCDIR)/uarm/libuarm.o $(OBJS)
+	$(LD) $(LDFLAGS) -o $(BIN) $(INCDIR)/crtso.o $(INCDIR)/libuarm.o $(OBJS)
 
-build/%.o: src/%.c
-	$(GCC) $(CFLAGS) $< -o $@
+-include $(OBJS:.o=.d)
 
-build/%.o: include/%.c
-	$(GCC) $(CFLAGS) $< -o $@
+build/%.o: **/%.c
+	$(GCC) $(CFLAGS) -c $< -o $@
+	@$(GCC) $(CFLAGS) -MM $< -MT "build/$*.o" > build/$*.d
 
 clean:
 	rm -f build/* tests/machine.uarm.cfg tests/term0.uarm
 
 test: $(BIN).core.uarm tests/machine.uarm.cfg
-	@uarm -c tests/machine.uarm.cfg -e -x && echo "Success, test passed." || (echo "Test failed." && exit 1)
+	@uarm -c tests/machine.uarm.cfg -e -x \
+		&& echo "Success, test passed." \
+		|| (echo "Test failed." && exit 1)
 
 tests/machine.uarm.cfg:
-	@sed -e "s|\@INCDIR\@|$(INCDIR)|g" -e "s|\@CURDIR\@|$(CURDIR)|g" tests/machine.uarm.tmp > tests/machine.uarm.cfg
+	@sed -e "s|\@BASEDIR\@|$(BASEDIR)|g" tests/machine.uarm.tmp > tests/machine.uarm.cfg
