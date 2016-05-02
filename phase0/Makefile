@@ -1,4 +1,4 @@
-.phony: all clean export
+.phony: all clean
 
 all: p0test
 
@@ -7,6 +7,3 @@ p0test:
 
 clean:
 	rm p0test
-
-export:
-	cp clist.h ../libs/clist.h
