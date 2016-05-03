@@ -19,6 +19,19 @@ void initHandler(memaddr addr, void* handler) {
     mem->cpsr = STATUS_ALL_INT_DISABLE(mem->cpsr) | STATUS_SYS_MODE;
 }
 
+void initVars() {
+    nucleus.processCount = 0;
+    nucleus.softBlockCount = 0;
+    nucleus.readyQueue = CLIST_INIT;
+    nucleus.currentProcess = NULL;
+}
+
+void initSemaphores() {
+    for (int i = 0; i < MAX_DEVICES; i++) {
+        nucleus.semaphores[i] = 0;
+    }
+}
+
 int main() {
     // Populate the four new areas in the ROM reserved frame
     initHandler(INT_NEWAREA, int_handler);
@@ -31,15 +44,10 @@ int main() {
     initASL();
 
     // Initialize all nucleus maintained variables
-    nucleus.processCount = 0;
-    nucleus.softBlockCount = 0;
-    nucleus.readyQueue = CLIST_INIT;
-    nucleus.currentProcess = NULL;
+    initVars();
 
     // Initialize all nucleus maintained semaphores
-    for (int i = 0; i < MAX_DEVICES; i++) {
-        nucleus.semaphores[i] = 0;
-    }
+    initSemaphores();
 
     return 0;
 }
