@@ -20,20 +20,26 @@ void initHandler(memaddr addr, void* handler) {
 }
 
 int main() {
+    // Populate the four new areas in the ROM reserved frame
     initHandler(INT_NEWAREA, int_handler);
     initHandler(TLB_NEWAREA, tlb_handler);
     initHandler(PGMTRAP_NEWAREA, pgmTrap_handler);
     initHandler(SYSBK_NEWAREA, sysBk_handler);
 
+    // Initialize level2 data structures
     initPcbs();
     initASL();
 
+    // Initialize all nucleus maintained variables
     nucleus.processCount = 0;
     nucleus.softBlockCount = 0;
     nucleus.readyQueue = CLIST_INIT;
     nucleus.currentProcess = NULL;
 
-    tprint("It works!\n");
+    // Initialize all nucleus maintained semaphores
+    for (int i = 0; i < MAX_DEVICES; i++) {
+        nucleus.semaphores[i] = 0;
+    }
 
     return 0;
 }
