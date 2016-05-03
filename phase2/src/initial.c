@@ -10,6 +10,7 @@
 #include "initial.h"
 #include "interrupts.h"
 #include "exceptions.h"
+#include "scheduler.h"
 
 void initHandler(memaddr addr, void* handler) {
     state_t* mem = (state_t*) addr;
@@ -68,6 +69,9 @@ int main() {
 
     // Instantiate test process
     initTest();
+
+    // Call the scheduler
+    scheduler();
 
     return 0;
 }
