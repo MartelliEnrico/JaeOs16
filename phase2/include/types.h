@@ -4,8 +4,6 @@
 
 #include "clist.h"
 
-typedef unsigned int size_t;
-
 struct pcb_t {
     struct pcb_t *p_parent; /* pointer to parent */
     struct semd_t *p_cursem; /* pointer to the semd_t on which process blocked */
