@@ -1,21 +1,21 @@
-#ifndef TYPES_H
-#define TYPES_h
+#pragma once
+
+#include <uARMtypes.h>
 
 #include "clist.h"
-#include <uARMtypes.h>
 #include "const.h"
 
 typedef unsigned int pid_t;
 typedef unsigned int cputime_t;
 
-typedef struct semd_t {
+struct semd_t {
     int *s_semAdd; /* pointer to the semaphore */
     struct clist s_link; /* ASL linked list */
     struct clist s_procq; /* blocked process queue */
-} semd_t;
+};
 
 /* process control block type */
-typedef struct pcb_t {
+struct pcb_t {
     struct pcb_t *p_parent; /* pointer to parent */
     struct semd_t *p_cursem; /* pointer to the semd_t on
                     which process blocked */
@@ -25,6 +25,4 @@ typedef struct pcb_t {
     struct clist p_list; /* process list */
     struct clist p_children; /* children list entry point*/
     struct clist p_siblings; /* children list: links to the siblings */
-} pcb_t;
-
-#endif
+};

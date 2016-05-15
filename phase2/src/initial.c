@@ -34,9 +34,7 @@ void initSemaphores() {
     }
 }
 
-void test() {
-    // TODO: substitute with `extern void test();`
-}
+extern void test();
 
 void initTest() {
     struct pcb_t* process = allocPcb();
