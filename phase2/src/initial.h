@@ -6,8 +6,8 @@
 #include "pcb.h"
 
 struct kernel_t {
-    short processCount;
-    short softBlockCount;
+    unsigned short processCount;
+    unsigned short softBlockCount;
     struct clist readyQueue;
     struct pcb_t* currentProcess;
     union {
