@@ -20,6 +20,7 @@ struct pcb_t {
     struct semd_t *p_cursem; /* pointer to the semd_t on
                     which process blocked */
     pid_t p_pid;
+    cputime_t p_time;
     state_t p_s; /* processor state */
     state_t p_excpvec[EXCP_COUNT]; /*exception states vector*/
     struct clist p_list; /* process list */
