@@ -45,7 +45,7 @@ void initTest() {
     process->p_s.CP15_Control = CP15_DISABLE_VM(process->p_s.CP15_Control);
 
     insertProcQ(&nucleus.readyQueue, process);
-    nucleus.currentProcess++;
+    nucleus.processCount++;
 }
 
 int main() {
