@@ -1,7 +1,7 @@
 #include <libuarm.h>
 
-#include "clist.h"
 #include "const.h"
+#include "clist.h"
 
 #include "scheduler.h"
 #include "initial.h"
