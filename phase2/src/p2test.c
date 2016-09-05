@@ -175,7 +175,6 @@ void testfun(){}
 /*                                                                   */
 void test() {	
 	cpu_t		time1, time2;
-	pid_t	fpid;
 
 	SYSCALL(SEMOP, (int)&testsem, 1, 0);					/* V(testsem)   */
 
@@ -660,9 +659,8 @@ void p5b(){
 }
 
 void p5c(){
-	char *msg, c;
+	char *msg;
 	int mode;
-	unsigned int call;
 
 	SYSCALL(SPECSYSHDL, (memaddr)p5sys, p5hdlstack, p5hdlflags);
 	SYSCALL(SPECPGMTHDL, (memaddr)p5prog, p5hdlstack, p5hdlflags);
@@ -727,8 +725,6 @@ void p7() {
 /* create a subtree of processes, wait for the leaves to block, signal*/
 /* the root process, and then terminate                               */
 void p8root() {
-	int i;
-	
 	p8pid = SYSCALL(GETPID, 0, 0, 0);
 
 	print("p8root starts\n");
