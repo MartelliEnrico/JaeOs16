@@ -1,26 +1,27 @@
 {
     "accessible-mode": false,
     "boot": {
-        "core-file": "build/phase2.core.uarm",
+        "core-file": "@CURDIR@/build/phase2",
         "load-core-file": true
     },
     "clock-rate": 1,
     "devices": {
         "terminal0": {
             "enabled": true,
-            "file": "tests/term0.uarm"
+            "file": "@CURDIR@/tests/term0.uarm"
         }
     },
-    "execution-rom": "@BASEDIR@/include/uarm/BIOS.rom.uarm",
+    "execution-rom": "@BASEDIR@/include/uarm/BIOS",
     "num-processors": 1,
-    "num-ram-frames": 512,
+    "num-ram-frames": 10240,
     "pause-on-exc": false,
     "pause-on-tlb": false,
-    "refresh-on-pause": true,
-    "refresh-rate": 1000,
+    "refresh-on-pause": false,
+    "refresh-rate": 600,
     "symbol-table": {
-        "asid": 127,
-        "file": "build/phase2.stab.uarm"
+        "asid": 0,
+        "external-stab": false,
+        "file": ""
     },
     "tlb-size": 16
 }

@@ -16,9 +16,6 @@ OBJS += $(patsubst include/%.c, build/%.o, $(wildcard include/*.c))
 
 all: test
 
-$(BIN).core.uarm: $(BIN)
-	elf2uarm -k $(BIN)
-
 $(BIN): $(OBJS)
 	$(LD) $(LDFLAGS) -o $(BIN) $(INCDIR)/crtso.o $(INCDIR)/libuarm.o $(OBJS)
 
@@ -31,10 +28,11 @@ build/%.o: **/%.c
 clean:
 	rm -f build/* tests/machine.uarm.cfg tests/term0.uarm
 
-test: $(BIN).core.uarm tests/machine.uarm.cfg
+test: tests/machine.uarm.cfg
 	@uarm -c tests/machine.uarm.cfg -e -x \
 		&& echo "Success, test passed." \
 		|| (echo "Test failed." && exit 1)
 
 tests/machine.uarm.cfg:
-	@sed -e "s|\@BASEDIR\@|$(BASEDIR)|g" tests/machine.uarm.tmp > tests/machine.uarm.cfg
+	@sed -e "s|\@BASEDIR\@|$(BASEDIR)|g" -e "s|\@CURDIR\@|$(CURDIR)|g" \
+		tests/machine.uarm.tmp > tests/machine.uarm.cfg
