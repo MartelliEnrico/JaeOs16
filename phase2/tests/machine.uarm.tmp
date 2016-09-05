@@ -1,10 +1,7 @@
 {
     "accessible-mode": false,
-    "boot": {
-        "core-file": "@CURDIR@/build/phase2",
-        "load-core-file": true
-    },
-    "clock-rate": 1,
+    "clock-rate": 50,
+    "core-file": "@CURDIR@/build/kernel",
     "devices": {
         "terminal0": {
             "enabled": true,
@@ -12,12 +9,11 @@
         }
     },
     "execution-rom": "@BASEDIR@/include/uarm/BIOS",
-    "num-processors": 1,
     "num-ram-frames": 10240,
     "pause-on-exc": false,
     "pause-on-tlb": false,
     "refresh-on-pause": false,
-    "refresh-rate": 600,
+    "refresh-rate": 1000,
     "symbol-table": {
         "asid": 0,
         "external-stab": false,

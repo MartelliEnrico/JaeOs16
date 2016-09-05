@@ -3,7 +3,7 @@ BASEDIR ?= /usr/local
 INCDIR = $(BASEDIR)/include/uarm
 CURDIR = $(shell pwd)
 
-BIN = build/phase2
+BIN = build/kernel
 GCC = arm-none-eabi-gcc
 CFLAGS = -O2 -mcpu=arm7tdmi -I$(INCDIR) -Iinclude -Wall
 LD = arm-none-eabi-ld
@@ -28,8 +28,8 @@ build/%.o: **/%.c
 clean:
 	rm -f build/* tests/machine.uarm.cfg tests/term0.uarm
 
-test: tests/machine.uarm.cfg
-	@uarm -c tests/machine.uarm.cfg -e -x \
+test: $(BIN) tests/machine.uarm.cfg
+	@uarm -c tests/machine.uarm.cfg -e -x
 		&& echo "Success, test passed." \
 		|| (echo "Test failed." && exit 1)
 
