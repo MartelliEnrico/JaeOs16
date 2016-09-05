@@ -1,6 +1,6 @@
 {
     "accessible-mode": false,
-    "clock-rate": 50,
+    "clock-rate": 1,
     "core-file": "@CURDIR@/build/kernel",
     "devices": {
         "terminal0": {
