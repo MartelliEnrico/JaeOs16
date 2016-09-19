@@ -25,15 +25,7 @@ void tick() {
         deltaClock = SCHED_PSEUDO_CLOCK;
     }
 
-    if (deltaClock <= deltaSlice) {
-        setTIMER(deltaClock);
-    } else {
-        setTIMER(deltaSlice);
-    }
-}
-
-void deadlock() {
-    PANIC();
+    setTIMER(MIN(deltaClock, deltaSlice));
 }
 
 void scheduler() {
@@ -44,7 +36,7 @@ void scheduler() {
             if (nucleus.processCount == 0) {
                 HALT();
             } else if (nucleus.softBlockCount == 0) {
-                deadlock();
+                PANIC();
             } else {
                 setSTATUS(STATUS_ALL_INT_ENABLE(getSTATUS()));
                 WAIT();

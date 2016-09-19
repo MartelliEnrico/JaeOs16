@@ -12,13 +12,13 @@
 #include "exceptions.h"
 #include "scheduler.h"
 
-void initHandler(memaddr addr, void* handler) {
+void initHandler(memaddr addr, void handler()) {
     state_t* mem = (state_t*) addr;
     STST(mem);
 
     mem->pc = (memaddr) handler;
     mem->sp = RAM_TOP;
-    mem->cpsr = STATUS_ALL_INT_DISABLE(mem->cpsr) | STATUS_SYS_MODE;
+    mem->cpsr = STATUS_ALL_INT_DISABLE(mem->cpsr | STATUS_SYS_MODE);
 }
 
 void initVars() {
@@ -50,25 +50,31 @@ void initTest() {
 
 int main() {
     // Populate the four new areas in the ROM reserved frame
+    tprint("Populate the four new areas in the ROM reserved frame\n");
     initHandler(INT_NEWAREA, int_handler);
     initHandler(TLB_NEWAREA, tlb_handler);
     initHandler(PGMTRAP_NEWAREA, pgmTrap_handler);
     initHandler(SYSBK_NEWAREA, sysBk_handler);
 
     // Initialize level2 data structures
+    tprint("Initialize level2 data structures\n");
     initPcbs();
     initASL();
 
     // Initialize all nucleus maintained variables
+    tprint("Initialize all nucleus maintained variables\n");
     initVars();
 
     // Initialize all nucleus maintained semaphores
+    tprint("Initialize all nucleus maintained semaphores\n");
     initSemaphores();
 
     // Instantiate test process
+    tprint("Instantiate test process\n");
     initTest();
 
     // Call the scheduler
+    tprint("Call the scheduler\n");
     scheduler();
 
     return 0;
