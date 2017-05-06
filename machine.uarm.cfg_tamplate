@@ -5,7 +5,7 @@
     "devices": {
         "terminal0": {
             "enabled": true,
-            "file": "@CURDIR@/tests/term0.uarm"
+            "file": "@CURDIR@/term0.uarm"
         }
     },
     "execution-rom": "@BASEDIR@/include/uarm/BIOS",
